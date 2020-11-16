@@ -22,7 +22,7 @@ function varargout = genetico(varargin)
 
 % Edit the above text to modify the response to help genetico
 
-% Last Modified by GUIDE v2.5 15-Nov-2020 19:32:29
+% Last Modified by GUIDE v2.5 15-Nov-2020 19:54:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -140,3 +140,12 @@ function edit3_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton1.
+function pushbutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+close(genetico)
+optimizacionModerna
