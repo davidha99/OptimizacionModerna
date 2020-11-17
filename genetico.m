@@ -22,7 +22,7 @@ function varargout = genetico(varargin)
 
 % Edit the above text to modify the response to help genetico
 
-% Last Modified by GUIDE v2.5 15-Nov-2020 19:54:48
+% Last Modified by GUIDE v2.5 17-Nov-2020 10:25:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -149,3 +149,12 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 close(genetico)
 optimizacionModerna
+
+
+% --- Executes during object creation, after setting all properties.
+function axes2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes2
