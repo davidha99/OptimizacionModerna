@@ -22,7 +22,7 @@ function varargout = optimizacionModerna(varargin)
 
 % Edit the above text to modify the response to help optimizacionModerna
 
-% Last Modified by GUIDE v2.5 17-Nov-2020 10:50:24
+% Last Modified by GUIDE v2.5 18-Nov-2020 16:42:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -218,6 +218,15 @@ switch get(handles.popupmenu1,'Value')
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
         
+        %Mandar mensaje de error
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
+        
     case 3 %Bukin 2 Function
         [F, Details] = bfm(2,1:1:5); %Pidiendo detalles de función a bfm.m
         sw1 = true; %True si las dimensiones son correctas, False en caso contrario
@@ -239,6 +248,12 @@ switch get(handles.popupmenu1,'Value')
         %correctos
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
+        
+        %Mandar mensaje de error
+        %if ~sw2
+        %    set(handles.edit7,'ForegroundColor',[1,0,0]) %Rojo
+        %    set(handles.edit7,'String','Error: Rango inválido');
+        %end
         
     case 4 %Keane Function
         [F, Details] = bfm(3,0:1:5); %Pidiendo detalles de función a bfm.m
@@ -262,6 +277,15 @@ switch get(handles.popupmenu1,'Value')
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
         
+        %Mandar mensaje de error
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
+        
     case 5 %Mishra 2 Function
         [F, Details] = bfm(4,1:1:5); %Pidiendo detalles de función a bfm.m
         sw1 = true; %True si las dimensiones son correctas, False en caso contrario
@@ -283,6 +307,15 @@ switch get(handles.popupmenu1,'Value')
         %correctos
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
+        
+        %Mandar mensaje de error
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
         
     case 6 %Trigonometric 1 Function
         [F, Details] = bfm(5,1:1:5); %Pidiendo detalles de función a bfm.m
@@ -306,6 +339,15 @@ switch get(handles.popupmenu1,'Value')
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
         
+        %Mandar mensaje de error
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
+        
     case 7 %Exponential Function
         [F, Details] = bfm(7,1:1:5); %Pidiendo detalles de función a bfm.m
         sw1 = true; %True si las dimensiones son correctas, False en caso contrario
@@ -328,6 +370,15 @@ switch get(handles.popupmenu1,'Value')
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
         
+        %Mandar mensaje de error
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
+        
     case 8 %Hosaki Function
         [F, Details] = bfm(8,1:1:5); %Pidiendo detalles de función a bfm.m
         sw1 = true; %True si las dimensiones son correctas, False en caso contrario
@@ -349,6 +400,15 @@ switch get(handles.popupmenu1,'Value')
         %correctos
         metodo = get(handles.popupmenu2,'Value');
         abrirVentana(sw1,sw2,metodo);
+        
+        %Mandar mensaje de error
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
         
     otherwise
         disp('Opción inválida')
@@ -394,6 +454,37 @@ function popupmenu3_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function text9_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to text9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+
+function edit7_Callback(hObject, eventdata, handles)
+% hObject    handle to edit7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit7 as text
+%        str2double(get(hObject,'String')) returns contents of edit7 as a double
+set(hObject,'ForegroundColor',[1,0,0]);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit7_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
