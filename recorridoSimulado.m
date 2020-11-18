@@ -22,7 +22,7 @@ function varargout = recorridoSimulado(varargin)
 
 % Edit the above text to modify the response to help recorridoSimulado
 
-% Last Modified by GUIDE v2.5 15-Nov-2020 19:43:35
+% Last Modified by GUIDE v2.5 18-Nov-2020 17:19:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -149,3 +149,10 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 close(recorridoSimulado)
 optimizacionModerna
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
