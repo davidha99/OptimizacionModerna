@@ -22,7 +22,7 @@ function varargout = optimizacionModerna(varargin)
 
 % Edit the above text to modify the response to help optimizacionModerna
 
-% Last Modified by GUIDE v2.5 18-Nov-2020 16:42:32
+% Last Modified by GUIDE v2.5 19-Nov-2020 11:28:38
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,6 +81,19 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
+popMenu1Value = get(hObject,'Value');
+popupMenu3Value = get(handles.popupmenu3,'Value');
+if popMenu1Value == 3 || popMenu1Value == 8 || popupMenu3Value == 4
+    set(handles.edit9,'BackgroundColor',[0.94 0.94 0.94]);
+    set(handles.edit9,'String','');
+    set(handles.edit10,'BackgroundColor',[0.94 0.94 0.94]);
+    set(handles.edit10,'String','');
+else
+    set(handles.edit9,'BackgroundColor',[0.5 0.5 0.5]);
+    set(handles.edit9,'String','/');
+    set(handles.edit10,'BackgroundColor',[0.5 0.5 0.5]);
+    set(handles.edit10,'String','/');
+end
 
 
 % --- Executes during object creation, after setting all properties.
@@ -207,11 +220,20 @@ switch get(handles.popupmenu1,'Value')
         usrDimension = str2double(contents{get(handles.popupmenu3,'Value')});
         sw1 = verifyDimensions(maxDim, usrDimension);
         
-        %Verificar Rango
+        %Verificar Rango dependiendo la dimensión
+        popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
-        sw2 = verificarRango(rango,limInf,limSup);
+        if popupMenu3Value ~= 4
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            sw2 = verificarRango(rango,limInf_X,limSup_X);
+        else
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            limInf_Y = str2double(get(handles.edit9,'String'));
+            limSup_Y = str2double(get(handles.edit10,'String'));
+            sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
+        end
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
         %correctos
@@ -240,9 +262,11 @@ switch get(handles.popupmenu1,'Value')
         
         %Verificar Rango
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
-        sw2 = verificarRango(rango,limInf,limSup);
+        limInf_X = str2double(get(handles.edit1,'String'));
+        limSup_X = str2double(get(handles.edit2,'String'));
+        limInf_Y = str2double(get(handles.edit9,'String'));
+        limSup_Y = str2double(get(handles.edit10,'String'));
+        sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
         %correctos
@@ -250,10 +274,13 @@ switch get(handles.popupmenu1,'Value')
         abrirVentana(sw1,sw2,metodo);
         
         %Mandar mensaje de error
-        %if ~sw2
-        %    set(handles.edit7,'ForegroundColor',[1,0,0]) %Rojo
-        %    set(handles.edit7,'String','Error: Rango inválido');
-        %end
+        if ~sw1 && ~sw2
+            set(handles.edit7,'String','Error: Dimensión y rango inválidos');
+        elseif ~sw1
+            set(handles.edit7,'String','Error: Dimensión inválida');
+        elseif ~sw2
+            set(handles.edit7,'String','Error: Rango inválido');
+        end
         
     case 4 %Keane Function
         [F, Details] = bfm(3,0:1:5); %Pidiendo detalles de función a bfm.m
@@ -268,8 +295,8 @@ switch get(handles.popupmenu1,'Value')
         
         %Verificar Rango
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
+        limInf = str2double(get(handles.edit1,'String'));
+        limSup = str2double(get(handles.edit2,'String'));
         sw2 = verificarRango(rango,limInf,limSup);
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
@@ -297,11 +324,20 @@ switch get(handles.popupmenu1,'Value')
         usrDimension = str2double(contents{get(handles.popupmenu3,'Value')});
         sw1 = verifyDimensions(maxDim, usrDimension);
         
-        %Verificar Rango
+        %Verificar Rango dependiendo la dimensión
+        popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
-        sw2 = verificarRango(rango,limInf,limSup);
+        if popupMenu3Value ~= 4
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            sw2 = verificarRango(rango,limInf_X,limSup_X);
+        else
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            limInf_Y = str2double(get(handles.edit9,'String'));
+            limSup_Y = str2double(get(handles.edit10,'String'));
+            sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
+        end
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
         %correctos
@@ -328,11 +364,20 @@ switch get(handles.popupmenu1,'Value')
         usrDimension = str2double(contents{get(handles.popupmenu3,'Value')});
         sw1 = verifyDimensions(maxDim, usrDimension);
         
-        %Verificar Rango
+        %Verificar Rango dependiendo la dimensión
+        popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
-        sw2 = verificarRango(rango,limInf,limSup);
+        if popupMenu3Value ~= 4
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            sw2 = verificarRango(rango,limInf_X,limSup_X);
+        else
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            limInf_Y = str2double(get(handles.edit9,'String'));
+            limSup_Y = str2double(get(handles.edit10,'String'));
+            sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
+        end
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
         %correctos
@@ -359,11 +404,20 @@ switch get(handles.popupmenu1,'Value')
         usrDimension = str2double(contents{get(handles.popupmenu3,'Value')});
         sw1 = verifyDimensions(maxDim, usrDimension);
         
-        %Verificar Rango
+        %Verificar Rango dependiendo la dimensión
+        popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
-        sw2 = verificarRango(rango,limInf,limSup);
+        if popupMenu3Value ~= 4
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            sw2 = verificarRango(rango,limInf_X,limSup_X);
+        else
+            limInf_X = str2double(get(handles.edit1,'String'));
+            limSup_X = str2double(get(handles.edit2,'String'));
+            limInf_Y = str2double(get(handles.edit9,'String'));
+            limSup_Y = str2double(get(handles.edit10,'String'));
+            sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
+        end
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
         %correctos
@@ -392,9 +446,11 @@ switch get(handles.popupmenu1,'Value')
         
         %Verificar Rango
         rango = Details.Constraints;
-        limInf = str2num(get(handles.edit1,'String'));
-        limSup = str2num(get(handles.edit2,'String'));
-        sw2 = verificarRango(rango,limInf,limSup);
+        limInf_X = str2double(get(handles.edit1,'String'));
+        limSup_X = str2double(get(handles.edit2,'String'));
+        limInf_Y = str2double(get(handles.edit9,'String'));
+        limSup_Y = str2double(get(handles.edit10,'String'));
+        sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         
         %Abrir siguiente ventana en caso de que rango y dimensión sean
         %correctos
@@ -445,7 +501,19 @@ function popupmenu3_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu3 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu3
-
+popupMenu3Value = get(hObject,'Value');
+popupMenu1Value = get(handles.popupmenu1,'Value');
+if popupMenu1Value == 3 || popupMenu1Value == 8 || popupMenu3Value == 4
+    set(handles.edit9,'BackgroundColor',[0.94 0.94 0.94]);
+    set(handles.edit9,'String','');
+    set(handles.edit10,'BackgroundColor',[0.94 0.94 0.94]);
+    set(handles.edit10,'String','');
+else
+    set(handles.edit9,'BackgroundColor',[0.5 0.5 0.5]);
+    set(handles.edit9,'String','/');
+    set(handles.edit10,'BackgroundColor',[0.5 0.5 0.5]);
+    set(handles.edit10,'String','/');
+end
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu3_CreateFcn(hObject, eventdata, handles)
@@ -481,6 +549,54 @@ set(hObject,'ForegroundColor',[1,0,0]);
 % --- Executes during object creation, after setting all properties.
 function edit7_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit9_Callback(hObject, eventdata, handles)
+% hObject    handle to edit9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit9 as text
+%        str2double(get(hObject,'String')) returns contents of edit9 as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function edit9_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit10_Callback(hObject, eventdata, handles)
+% hObject    handle to edit10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit10 as text
+%        str2double(get(hObject,'String')) returns contents of edit10 as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function edit10_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit10 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
