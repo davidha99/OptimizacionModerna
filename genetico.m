@@ -22,7 +22,7 @@ function varargout = genetico(varargin)
 
 % Edit the above text to modify the response to help genetico
 
-% Last Modified by GUIDE v2.5 18-Nov-2020 17:16:13
+% Last Modified by GUIDE v2.5 21-Nov-2020 20:12:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,8 +52,33 @@ function genetico_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to genetico (see VARARGIN)
 
+% Variables from optimizacionModerna
+handles.bid = varargin{1}.bid;
+handles.dim = varargin{1}.dim;
+if handles.dim == 2
+    handles.limInfX = varargin{1}.limInfX;
+    handles.limSupX = varargin{1}.limSupX;
+elseif handles.dim == 3 || handles.bid == 3 || handles.bid == 8
+    handles.limInfX = varargin{1}.limInfX;
+    handles.limSupX = varargin{1}.limSupX;
+    handles.limInfY = varargin{1}.limInfY;
+    handles.limSupY = varargin{1}.limSupY;
+end
+disp(varargin{1});
+
 % Choose default command line output for genetico
-handles.output = hObject;
+handles.output = hObject;%--No borrar
+
+% Ajustando axes2
+%axes(handles.axes2);
+%if handles.dim == 2
+%    xlim([handles.limInfX handles.limSupX]);
+%    ylim([handles.limInfX handles.limSupX]);
+%elseif handles.dim == 3 || handles.bid == 3 || handles.bid == 8
+%    xlim([handles.limInfX handles.limSupX]);
+%    ylim([handles.limInfY handles.limSupY]);
+%end
+
 
 % Update handles structure
 guidata(hObject, handles);
@@ -147,7 +172,13 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-close(genetico)
+set(handles.edit1,'String','');
+set(handles.edit3,'String','');
+set(handles.edit4,'String','');
+set(handles.edit5,'String','');
+cla(handles.axes1, 'reset');
+cla(handles.axes2, 'reset');
+cla(handles.axes3, 'reset');
 optimizacionModerna
 
 
@@ -160,8 +191,72 @@ function axes2_CreateFcn(hObject, eventdata, handles)
 % Hint: place code in OpeningFcn to populate axes2
 
 
-% --- Executes on button press in pushbutton2.
+% --- Executes on button press in pushbutton2 -- EJECUTAR.
 function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+numIndiv = str2double(get(handles.edit1,'String'));
+GenMax = str2double(get(handles.edit3,'String'));
+if handles.dim == 2
+    minimo = AG(handles.bid, numIndiv, handles.limInfX, handles.limSupX, GenMax, handles.axes1, handles.axes2);
+    %axes(handles.axes1);
+    set(handles.edit4,'String', minimo);
+    
+elseif handles.dim == 3
+    limInf = [handles.limInfX handles.limInfY];
+    limSup = [handles.limSupX handles.limSupY];
+    minimo = AG3d(handles.bid, numIndiv, limInf, limSup, GenMax, handles.axes1, handles.axes3, handles.axes2);
+    var1 = minimo(1);
+    var2 = minimo(2);
+    set(handles.edit4,'String', var1);
+    set(handles.edit5,'String', var2);
+end
+% Gráficas
+
+
+
+function edit4_Callback(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit4 as text
+%        str2double(get(hObject,'String')) returns contents of edit4 as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function edit4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit5_Callback(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit5 as text
+%        str2double(get(hObject,'String')) returns contents of edit5 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
