@@ -22,7 +22,7 @@ function varargout = optimizacionModerna(varargin)
 
 % Edit the above text to modify the response to help optimizacionModerna
 
-% Last Modified by GUIDE v2.5 19-Nov-2020 11:28:38
+% Last Modified by GUIDE v2.5 20-Nov-2020 11:36:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,9 +81,10 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
+bid = 0;
 popMenu1Value = get(hObject,'Value');
 popupMenu3Value = get(handles.popupmenu3,'Value');
-if popMenu1Value == 3 || popMenu1Value == 8 || popupMenu3Value == 4
+if popupMenu3Value == 3
     set(handles.edit9,'BackgroundColor',[0.94 0.94 0.94]);
     set(handles.edit9,'String','');
     set(handles.edit10,'BackgroundColor',[0.94 0.94 0.94]);
@@ -93,6 +94,38 @@ else
     set(handles.edit9,'String','/');
     set(handles.edit10,'BackgroundColor',[0.5 0.5 0.5]);
     set(handles.edit10,'String','/');
+end
+
+% Cuadro de Bid
+switch popMenu1Value
+    case 2
+        set(handles.edit11,'String','1');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
+    case 3
+        set(handles.edit11,'String','2');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
+    case 4
+        set(handles.edit11,'String','3');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
+    case 5
+        set(handles.edit11,'String','4');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
+    case 6
+        set(handles.edit11,'String','5');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
+    case 7
+        set(handles.edit11,'String','7');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
+    case 8
+        set(handles.edit11,'String','8');
+        bid = str2double(get(handles.edit11,'String'));
+        handles.bid = bid;
 end
 
 
@@ -200,13 +233,27 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%if get(handles.popupmenu2,'Value') == 2
-%    close(optimizacionModerna)
-%    genetico
-%elseif get(handles.popupmenu2,'Value') == 3
-%    close(optimizacionModerna)
-%    recorridoSimulado
-%end
+% Saving Bid in handles
+bid = str2double(get(handles.edit11,'String'));
+handles.bid = bid;
+% Saving Dimensions in handles
+contents = cellstr(get(handles.popupmenu3,'String'));
+dim = str2double(contents{get(handles.popupmenu3,'Value')});
+handles.dim = dim;
+
+%Saving Range in handles
+limInfX = str2double(get(handles.edit1,'String'));
+handles.limInfX = limInfX;
+limSupX = str2double(get(handles.edit2,'String'));
+handles.limSupX = limSupX;
+popupMenu1Value = get(handles.popupmenu1,'Value');
+
+if dim == 3 || popupMenu1Value == 3 || popupMenu1Value == 8
+    limInfY = str2double(get(handles.edit9,'String'));
+    handles.limInfY = limInfY;
+    limSupY = str2double(get(handles.edit10,'String'));
+    handles.limSupY = limSupY;
+end
 
 switch get(handles.popupmenu1,'Value')
     case 2 %Cosine Mixture Function
@@ -223,7 +270,7 @@ switch get(handles.popupmenu1,'Value')
         %Verificar Rango dependiendo la dimensión
         popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        if popupMenu3Value ~= 4
+        if popupMenu3Value ~= 3
             limInf_X = str2double(get(handles.edit1,'String'));
             limSup_X = str2double(get(handles.edit2,'String'));
             sw2 = verificarRango(rango,limInf_X,limSup_X);
@@ -234,12 +281,7 @@ switch get(handles.popupmenu1,'Value')
             limSup_Y = str2double(get(handles.edit10,'String'));
             sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         end
-        
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
+                
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -247,6 +289,16 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                % Taking handles
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     case 3 %Bukin 2 Function
@@ -258,7 +310,7 @@ switch get(handles.popupmenu1,'Value')
         maxDim = Details.MaxDimensions;
         contents = cellstr(get(handles.popupmenu3,'String'));
         usrDimension = str2double(contents{get(handles.popupmenu3,'Value')});
-        sw1 = verifyDimensions(maxDim, usrDimension);
+        sw1 = verifyDimensions(maxDim + 1, usrDimension);
         
         %Verificar Rango
         rango = Details.Constraints;
@@ -267,12 +319,7 @@ switch get(handles.popupmenu1,'Value')
         limInf_Y = str2double(get(handles.edit9,'String'));
         limSup_Y = str2double(get(handles.edit10,'String'));
         sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
-        
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
+                
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -280,6 +327,15 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     case 4 %Keane Function
@@ -298,12 +354,7 @@ switch get(handles.popupmenu1,'Value')
         limInf = str2double(get(handles.edit1,'String'));
         limSup = str2double(get(handles.edit2,'String'));
         sw2 = verificarRango(rango,limInf,limSup);
-        
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
+                
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -311,6 +362,15 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     case 5 %Mishra 2 Function
@@ -327,7 +387,7 @@ switch get(handles.popupmenu1,'Value')
         %Verificar Rango dependiendo la dimensión
         popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        if popupMenu3Value ~= 4
+        if popupMenu3Value ~= 3
             limInf_X = str2double(get(handles.edit1,'String'));
             limSup_X = str2double(get(handles.edit2,'String'));
             sw2 = verificarRango(rango,limInf_X,limSup_X);
@@ -339,11 +399,6 @@ switch get(handles.popupmenu1,'Value')
             sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         end
         
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -351,6 +406,15 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     case 6 %Trigonometric 1 Function
@@ -367,7 +431,7 @@ switch get(handles.popupmenu1,'Value')
         %Verificar Rango dependiendo la dimensión
         popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        if popupMenu3Value ~= 4
+        if popupMenu3Value ~= 3
             limInf_X = str2double(get(handles.edit1,'String'));
             limSup_X = str2double(get(handles.edit2,'String'));
             sw2 = verificarRango(rango,limInf_X,limSup_X);
@@ -379,11 +443,6 @@ switch get(handles.popupmenu1,'Value')
             sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         end
         
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -391,6 +450,15 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     case 7 %Exponential Function
@@ -407,7 +475,7 @@ switch get(handles.popupmenu1,'Value')
         %Verificar Rango dependiendo la dimensión
         popupMenu3Value = get(handles.popupmenu3,'Value');
         rango = Details.Constraints;
-        if popupMenu3Value ~= 4
+        if popupMenu3Value ~= 3
             limInf_X = str2double(get(handles.edit1,'String'));
             limSup_X = str2double(get(handles.edit2,'String'));
             sw2 = verificarRango(rango,limInf_X,limSup_X);
@@ -419,11 +487,6 @@ switch get(handles.popupmenu1,'Value')
             sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         end
         
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -431,6 +494,15 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     case 8 %Hosaki Function
@@ -442,7 +514,7 @@ switch get(handles.popupmenu1,'Value')
         maxDim = Details.MaxDimensions;
         contents = cellstr(get(handles.popupmenu3,'String'));
         usrDimension = str2double(contents{get(handles.popupmenu3,'Value')});
-        sw1 = verifyDimensions(maxDim, usrDimension);
+        sw1 = verifyDimensions(maxDim + 1, usrDimension);
         
         %Verificar Rango
         rango = Details.Constraints;
@@ -452,11 +524,6 @@ switch get(handles.popupmenu1,'Value')
         limSup_Y = str2double(get(handles.edit10,'String'));
         sw2 = verificarRangoXY(rango,limInf_X, limSup_X,limInf_Y,limSup_Y);
         
-        %Abrir siguiente ventana en caso de que rango y dimensión sean
-        %correctos
-        metodo = get(handles.popupmenu2,'Value');
-        abrirVentana(sw1,sw2,metodo);
-        
         %Mandar mensaje de error
         if ~sw1 && ~sw2
             set(handles.edit7,'String','Error: Dimensión y rango inválidos');
@@ -464,6 +531,15 @@ switch get(handles.popupmenu1,'Value')
             set(handles.edit7,'String','Error: Dimensión inválida');
         elseif ~sw2
             set(handles.edit7,'String','Error: Rango inválido');
+        elseif sw1 && sw2 %En caso de todo correcto
+            metodo = get(handles.popupmenu2,'Value');
+            if metodo == 2
+                close(optimizacionModerna)
+                genetico(handles)
+            elseif metodo == 3
+                close(optimizacionModerna)
+                recorridoSimulado(handles)
+            end
         end
         
     otherwise
@@ -503,7 +579,7 @@ function popupmenu3_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from popupmenu3
 popupMenu3Value = get(hObject,'Value');
 popupMenu1Value = get(handles.popupmenu1,'Value');
-if popupMenu1Value == 3 || popupMenu1Value == 8 || popupMenu3Value == 4
+if popupMenu3Value == 3
     set(handles.edit9,'BackgroundColor',[0.94 0.94 0.94]);
     set(handles.edit9,'String','');
     set(handles.edit10,'BackgroundColor',[0.94 0.94 0.94]);
@@ -597,6 +673,29 @@ function edit10_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit10_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit11_Callback(hObject, eventdata, handles)
+% hObject    handle to edit11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit11 as text
+%        str2double(get(hObject,'String')) returns contents of edit11 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit11_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit11 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
