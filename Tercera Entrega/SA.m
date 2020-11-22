@@ -3,9 +3,9 @@ fid = 12;
 % LimS = [x , y] ;
 LimI = [-5,-5];
 LimS = [5,5];
-NR=7;
-Ti=15;
-dim=2;
+NR=7; %# de iteraciones antes de bajar temperatura
+Ti=15; %temperatura inicial
+dim=2; %2 o 3 dimensiones
 CalculaSA1(fid,LimI,LimS,NR,Ti,dim);
 %%
 function Min = CalculaSA1(fID,limiteInf,limiteSup, Nrepe,T,dim)
