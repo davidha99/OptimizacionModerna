@@ -180,6 +180,7 @@ set(handles.edit5,'String','');
 cla(handles.axes5, 'reset');
 cla(handles.axes7, 'reset');
 cla(handles.axes1, 'reset');
+cla(handles.axes8, 'reset');
 optimizacionModerna;
 
 
@@ -192,11 +193,11 @@ nRepe = str2double(get(handles.edit3,'String'));
 T = str2double(get(handles.edit1,'String'));
 % Llamando archivo de función
 if handles.dim == 2
-    Min = SA(handles.bid, handles.limInfX, handles.limSupX,nRepe,T,handles.dim - 1, handles.axes5, handles.axes7, handles.axes1);
+    Min = SA(handles.bid, handles.limInfX, handles.limSupX,nRepe,T,handles.dim - 1, handles.axes5, handles.axes7, handles.axes1, handles.axes8);
 elseif handles.dim == 3
     limInf = [handles.limInfX handles.limInfY];
     limSup = [handles.limSupX handles.limSupY];
-    Min = SA(handles.bid, limInf,limSup,nRepe,T,handles.dim - 1, handles.axes5, handles.axes7, handles.axes1);
+    Min = SA(handles.bid, limInf,limSup,nRepe,T,handles.dim - 1, handles.axes5, handles.axes7, handles.axes1, handles.axes8);
 end
 
 if handles.dim == 2
