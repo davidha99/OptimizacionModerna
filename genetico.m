@@ -179,6 +179,7 @@ set(handles.edit5,'String','');
 cla(handles.axes1, 'reset');
 cla(handles.axes2, 'reset');
 cla(handles.axes3, 'reset');
+cla(handles.axes4, 'reset');
 optimizacionModerna
 
 
@@ -199,14 +200,14 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 numIndiv = str2double(get(handles.edit1,'String'));
 GenMax = str2double(get(handles.edit3,'String'));
 if handles.dim == 2
-    minimo = AG(handles.bid, numIndiv, handles.limInfX, handles.limSupX, GenMax, handles.axes1, handles.axes2);
+    minimo = AG(handles.bid, numIndiv, handles.limInfX, handles.limSupX, GenMax, handles.axes1, handles.axes2, handles.axes4);
     %axes(handles.axes1);
     set(handles.edit4,'String', minimo);
     
 elseif handles.dim == 3
     limInf = [handles.limInfX handles.limInfY];
     limSup = [handles.limSupX handles.limSupY];
-    minimo = AG3d(handles.bid, numIndiv, limInf, limSup, GenMax, handles.axes1, handles.axes3, handles.axes2);
+    minimo = AG3d(handles.bid, numIndiv, limInf, limSup, GenMax, handles.axes1, handles.axes3, handles.axes2, handles.axes4);
     var1 = minimo(1);
     var2 = minimo(2);
     set(handles.edit4,'String', var1);
