@@ -6,13 +6,17 @@
 %GenMAX = 500;
 %AlgGen(fid,numIndiv,LI,LS,GenMAX);
 %%
-function minimo = AG(fid,numIndiv,LI,LS,GenMAX, f1, f3)
+function minimo = AG(fid,numIndiv,LI,LS,GenMAX, f1, f3, f4)
 p = GenerarPoblacion(numIndiv,LI,LS);
 cosPob = Evaluar(fid,p,numIndiv);
 [minimo, im] = min(cosPob);
 Sact = p(im);
 historico(1) = Sact;
 Gen = 1;
+%f4 = figure;
+axes(f4);
+h3=animatedline;
+addpoints(h3,Gen,bfm(fid,Sact));
 %f1 = figure;
 axes(f1);
 %figure(f1);
@@ -27,6 +31,7 @@ while Gen<GenMAX
     [minimo, im] = min(cosPob);
     Sact = p(im);
     historico(Gen) = Sact;
+    addpoints(h3,Gen,bfm(fid,Sact));
     addpoints(h,Gen,Sact);
     drawnow;
     if (Gen>50 && historico(Gen)==historico(Gen-25))

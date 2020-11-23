@@ -8,12 +8,15 @@
 %dim=2;
 %AlgGen(fid,numIndiv,LI,LS,GenMAX);
 %%
-function minimo = AG3d(fid,numIndiv,LI,LS,GenMAX, f1, f2, f3)
+function minimo = AG3d(fid,numIndiv,LI,LS,GenMAX, f1, f2, f3, f4)
 p = GenerarPoblacion(numIndiv,LI,LS);
 cosPob = Evaluar(fid,p,numIndiv);
 [minimo, im] = min(cosPob);
 Sact = p(:,im);
 Gen = 1;
+axes(f4);
+h3=animatedline;
+addpoints(h3,Gen,bfm(fid,Sact));
 %f1= figure('Name','Sol X','NumberTitle','off');
 axes(f1);
 h = animatedline;
@@ -30,6 +33,7 @@ while Gen<GenMAX
     [minimo, im] = min(cosPob);
     Sact = p(:,im);
     historico(:,Gen)=Sact;
+    addpoints(h3,Gen,bfm(fid,Sact));
     Impresion3d(Gen,Sact,h,h2)
     if (Gen>50 & (historico(:,Gen)==historico(:,Gen-25)))
         break;
