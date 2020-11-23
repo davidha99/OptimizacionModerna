@@ -7,13 +7,14 @@
 %dim=2;
 %CalculaSA1(fid,LimI,LimS,NR,Ti,dim);
 %%
-function Min = SA(fID,limiteInf,limiteSup, Nrepe,T,dim, f1, f2, f3)
+function Min = SA(fID,limiteInf,limiteSup, Nrepe,T,dim, f1, f2, f3, f4)
     Tf = 0.0000001;
   % Imprmimir Funcion Objetivo***********************************************
     f = @(rango) bfm(fID,rango);
   % Primeras Soluciones *****************************************************
   if(dim==1)
-    Sact = (limiteInf+limiteSup)/2;
+    Sact = ((limiteInf*rand())+(limiteSup*rand()))/2;
+    %Sact = (limiteInf+limiteSup)/2;
   else
     Sact = [(limiteInf(1) + (limiteSup(1)-limiteInf(1)).*rand()) (limiteInf(2) + (limiteSup(2)-limiteInf(2)).*rand())];
   end
@@ -21,6 +22,9 @@ function Min = SA(fID,limiteInf,limiteSup, Nrepe,T,dim, f1, f2, f3)
     CritAcep = @(T, delta) exp(delta/T);
   % Ciclo de busqueda********************************************************
     cont=1;
+    axes(f4);
+    h3=animatedline;
+    addpoints(h3,cont,bfm(fID,Sact));
     if(dim==1)
         %f1 = figure;
         axes(f1);
@@ -53,6 +57,7 @@ function Min = SA(fID,limiteInf,limiteSup, Nrepe,T,dim, f1, f2, f3)
                 Impresion3d(cont,Sact,h,h2);
                 cont=cont+1;
             end
+            addpoints(h3,cont,bfm(fID,Sact));
        end
        T = Cooling(T);
     end
